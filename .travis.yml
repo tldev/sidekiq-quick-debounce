@@ -1,0 +1,17 @@
+language: ruby
+rvm:
+ - 2.2.5
+ - 2.3.1
+ - jruby-9.0.1.0
+ - jruby-9.0.5.0
+gemfile:
+- gemfiles/Gemfile.sidekiq-2.17.7
+- gemfiles/Gemfile.sidekiq-3.1.0
+- gemfiles/Gemfile.sidekiq-3.3.4
+- gemfiles/Gemfile.sidekiq-4.0.2
+script: bundle exec rake test
+addons:
+ code_climate:
+  repo_token: aeabe3cfb3b99aeea0bb8e9899bef81b7d312234a5abb44e4a7a0aa0c5c881f4
+after_success:
+ - bundle exec codeclimate-test-reporter
