@@ -10,13 +10,13 @@ module Sidekiq
 
       return yield unless quick_debounce?
 
-      block = Proc.new do |conn|
+      block = proc do |conn|
         fetch_current_options(conn)
         if current_jid
           self.class.cancel!(
             conn: conn,
             jid: current_jid,
-            expires_at: current_runs_at + CANCEL_EXPIRATION_BUFFER
+            expires_at: current_runs_at + CANCEL_EXPIRATION_BUFFER,
           )
         end
         jid = yield
@@ -48,7 +48,7 @@ module Sidekiq
       conn.setex(
         worker_key,
         runs_at.to_i - Time.now.to_i,
-        { jid: jid, runs_at: runs_at }.to_json
+        { jid: jid, runs_at: runs_at }.to_json,
       )
     end
 
@@ -75,7 +75,7 @@ module Sidekiq
     end
 
     def delayed?
-      !!@msg['at']
+      !@msg['at'].nil?
     end
 
     class << self
